@@ -1,7 +1,34 @@
   task_system.c (task_system.h, task_system_attribute.h)
    Non-Blocking & Update By Time Code -> System Modeling
 
+Se declaran las bibliotecas generales con la que trabaja.
+Se declaran las bibliotecas de las tareas:
+  task_system_attribute.h, que contiene los tipos enumerativos de los eventos y estados del sistema, y la estructura de datos dta.
+-  task_system_interface.h, que contiene las funciones externas de la interface entre el sistema y los sensores.
+Se declaran las bibliotecas de las tareas de actuador.
+
+Se declaran las constantes generales del Tick y de los delay de sistema.
+
+Se declara una variable de datos del sistema.
+
+En la función task_system_init(), se inicializa la máquina de estados del sistema.
+En la función task_system_update(), se analiza si hay un nuevo tick vigente. En ese caso entra al bucle, en el cual invoca a la función task_system_statechart(). Esto se repite mientras haya puntos de tick vigentes.
+En la función task_system_statechart() están los estados de la máquina declarados y las funciones que debe realizar en casa caso.
+
   task_system_interface.c (task_system_interface.h)
    Non-Blocking Code
 
-...
+En este archivo se define la estructura de tareas a realizar queue_task_a.
+En las funciones, se definen las funciones de la interfaz entre el sistema y los sensores.
+
+Para estas funciones utiliza los tipos enumerativos declarados en task_system_attribute.h:
+- task_system_ev, que enumera los eventos del sistema.
+- task_system_st, que enumera los estados del sistema.
+También está declarada la estructura de datos task_system_dta.
+
+init_queue_event_task_system, para inicializar el evento de inicio.
+put_event_task_system, para cargar un evento.
+get_event_task_system, para leer un evento.
+any_event_task_system, para ver si hay eventos.
+
+task_system.png contiene el modelo de la máquina de estados de sistema que se debe implementar.
