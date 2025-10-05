@@ -1,7 +1,8 @@
   task_sensor.c (task_sensor.h, task_sensor_attribute.h) 
    Non-Blocking & Update By Time Code -> Sensor Modeling
+ 
   
-Hay una listra de configuraciones:
+Hay una lista de configuraciones:
 task_sensor_cfg_list define que pines son botones o sensores y que eventos debe disparar 
 task_sensor_dta_list guarda el estado actual de cada boton 
 task_sensor_statechart que actualiza los estados segun lo que lee
@@ -15,8 +16,22 @@ Utiliza un tick para ver cuando debe actualizar algo usando condiciiones if en e
  
  void task_sensor_statechart:
   Segun el previo estado toma deciosiones:
-  Si estaba en ST_BTN_XX_UP y ahora el evento es EV_BTN_XX_DOWN, esto dispara el evento 
-  put_event_task_system(p_task_sensor_cfg->signal_down) que hace que pase al estado ST_BTN_XX_DOWN
+  Si estaba en ST_BTN_XX_UP y ahora el evento es EV_BTN_XX_DOWN, dispara una signal_down 
+  put_event_task_system(p_task_sensor_cfg->signal_down) que hace que pase al estado ST_BTN_XX_DOWN y el valor del tick aumenta al maximo valor elegido para el DEBOUNCE del boton
   Si estaba en ST_BTN_XX_DOWN el evento es EV_BTN_XX_UP, dispara una signal_up haciendo que el estado
-   pase a ST_BTN_XX_UP,
-ST_BTN_XX_RISING y ST_BTN_XX_FALLING estan declarados pero todavia no implementados 
+   pase a ST_BTN_XX_UP y el valor del tick aumenta al maximo valor elegido para el DEBOUNCE del boton.
+   
+ 
+ Si estaba en ST_BTN_XX_FALLING y ahora el evento es EV_BTN_XX_DOWN compara si el tick actual
+ es cero. Si es así cambia el estado a a ST_BTN_XX_DOWN y dispara la funcion  put_event_task_system(p_task_sensor_cfg->signal_down)
+ para enviar la informacion al sistema.
+ 
+ En cambio, si el tick actual es cero y el evento es EV_BTN_XX_UP cambia el estado a ST_BTN_XX_UP. disparando
+ de igual forma el  put_event_task_system(p_task_sensor_cfg->signal_down) para enviar la informacion al sistema.
+ 
+  Si estaba en ST_BTN_XX_RISING y ahora el evento es EV_BTN_XX_UP compara el tick actual, viendo si esta es cero
+  si el tick no es cero, decrementara -1 tick por ciclo. Si es cero, entonces cambia el estado a ST_XX_BTN_UP y envia la 
+  informacion al sistema.
+  Si el evento es EV_BTN_XX_DOWN realiza el mismo procedimiento cambiando el estado a ST_XX_BTN_DOWN.
+  
+ 

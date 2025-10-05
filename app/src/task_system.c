@@ -187,7 +187,7 @@ void task_system_statechart(void) {
 		}
 		if (p_task_system_dta->tick == DEL_SYS_MIN) {
 			put_event_task_actuator(EV_LED_XX_ON, ID_LED_A);
-			//put_event_task_actuator(EV_LED_XX_ON, ID_LED_B);
+			put_event_task_actuator(EV_LED_XX_ON, ID_LED_B);
 
 			p_task_system_dta->flag = false;
 			p_task_system_dta->state = ST_SYS_ACTIVE_03;
@@ -217,15 +217,15 @@ void task_system_statechart(void) {
 			p_task_system_dta->flag = false;
 			p_task_system_dta->tick = DEL_SYS_MAX;
 			p_task_system_dta->state = ST_SYS_ACTIVE_06;
+		}
 		break;
-
 	case ST_SYS_ACTIVE_06:
 		if (p_task_system_dta->tick > DEL_SYS_MIN) {
 			p_task_system_dta->tick--;
 		}
 		if (p_task_system_dta->tick == DEL_SYS_MIN) {
 			put_event_task_actuator(EV_LED_XX_OFF, ID_LED_A);
-			//put_event_task_actuator(EV_LED_XX_OFF, ID_LED_B);
+			put_event_task_actuator(EV_LED_XX_OFF, ID_LED_B);
 
 			p_task_system_dta->flag = false;
 			p_task_system_dta->state = ST_SYS_IDLE;
@@ -234,7 +234,7 @@ void task_system_statechart(void) {
 
 	default:
 		put_event_task_actuator(EV_LED_XX_OFF, ID_LED_A);
-		//put_event_task_actuator(EV_LED_XX_OFF, ID_LED_B);
+		put_event_task_actuator(EV_LED_XX_OFF, ID_LED_B);
 		p_task_system_dta->tick = DEL_SYS_MIN;
 		p_task_system_dta->state = ST_SYS_IDLE;
 		p_task_system_dta->event = EV_SYS_IDLE;
